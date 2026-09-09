@@ -8,6 +8,7 @@ using System.Net.Sockets;
 using System.Text;
 
 bool isConnected = false;
+bool isMsg = false;
 
 TcpClient client = new TcpClient();
 
@@ -28,24 +29,46 @@ while (!isConnected)
         client = new TcpClient();
         }
     }
-
 NetworkStream stream = client.GetStream();
 
-string message = "Hello from client!";
+Console.WriteLine("Welcome to NetChat Client!\nPlease enter your name: ");
+string? userName = Console.ReadLine();
 
-byte[] data = Encoding.UTF8.GetBytes(message);
+if(!string.IsNullOrWhiteSpace(userName))
+{
+    Console.WriteLine($"Hello {userName}! You can now send messages to the server.");
 
-await stream.WriteAsync(data);
+    byte[] username = Encoding.UTF8.GetBytes(userName);
+    await stream.WriteAsync(username);
+}
 
-Console.WriteLine("Sent message to server!");
 
+while (!isMsg){
+    Console.Write($"{userName}: ");
+    string? userInput = Console.ReadLine();
+    isMsg = true;
+    if (!string.IsNullOrWhiteSpace(userInput))
+    {
+        byte[] data = Encoding.UTF8.GetBytes(userInput);
+        await stream.WriteAsync(data);
+        //Console.WriteLine("Sent message to server!");
+        isMsg = false;
+    }
+    else
+    {
+        Console.WriteLine("No message entered. Exiting...");
+    }
+}
 
-byte[] buffer = new byte[1024];
-
-int bytesRead = await stream.ReadAsync(buffer);
-
-string serverReplyMsg = Encoding.UTF8.GetString(buffer, 0, bytesRead);
-
-Console.WriteLine($"Received message from Server: {serverReplyMsg}");
 
 Console.ReadLine();
+
+
+
+//byte[] buffer = new byte[1024];
+
+//int bytesRead = await stream.ReadAsync(buffer);
+
+//string serverReplyMsg = Encoding.UTF8.GetString(buffer, 0, bytesRead);
+
+//Console.WriteLine($"Received message from Server: {serverReplyMsg}");

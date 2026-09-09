@@ -5,7 +5,6 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 
-
 TcpListener listener = new TcpListener(IPAddress.Any, 5000);
 
 listener.Start();
@@ -22,18 +21,20 @@ NetworkStream stream = client.GetStream();
 
 byte[] buffer = new byte[1024];
 
-int bytesRead = await stream.ReadAsync(buffer);
+byte[] usernameBuffer = new byte[1024];
 
-string message = Encoding.UTF8.GetString(buffer, 0, bytesRead);
+int bytesUsername = await stream.ReadAsync(usernameBuffer);
 
-Console.WriteLine($"Received message from client: {message}");
+string username = Encoding.UTF8.GetString(usernameBuffer, 0, bytesUsername);
 
-string reply = "Hello Client! Message received.";
+while (true)
+{
+    int bytesRead = await stream.ReadAsync(buffer);
 
-byte[] replyData = Encoding.UTF8.GetBytes(reply);
+    string message = Encoding.UTF8.GetString(buffer, 0, bytesRead);
 
-await stream.WriteAsync(replyData);
+    Console.WriteLine($"Received message from {username}: {message}");
 
-Console.WriteLine("Reply sent to client...");
+}
 
 Console.ReadLine();
