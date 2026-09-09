@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.37111.16 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Netchat.Server", "Netchat.Server\Netchat.Server.csproj", "{1441EDA8-1F6E-4849-810F-094EB29AD1C9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Netchat.Client", "Netchat.Client\Netchat.Client.csproj", "{D6EDA6F4-BB7B-4223-8786-9576276BF04E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1441EDA8-1F6E-4849-810F-094EB29AD1C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1441EDA8-1F6E-4849-810F-094EB29AD1C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1441EDA8-1F6E-4849-810F-094EB29AD1C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1441EDA8-1F6E-4849-810F-094EB29AD1C9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D6EDA6F4-BB7B-4223-8786-9576276BF04E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D6EDA6F4-BB7B-4223-8786-9576276BF04E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D6EDA6F4-BB7B-4223-8786-9576276BF04E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D6EDA6F4-BB7B-4223-8786-9576276BF04E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6792BE3A-BF9F-4073-9060-A9C216557A01}
+	EndGlobalSection
+EndGlobal
