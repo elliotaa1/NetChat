@@ -37,6 +37,15 @@ byte[] data = Encoding.UTF8.GetBytes(message);
 
 await stream.WriteAsync(data);
 
-Console.WriteLine($"Sent message to server: {message}");
+Console.WriteLine("Sent message to server!");
+
+
+byte[] buffer = new byte[1024];
+
+int bytesRead = await stream.ReadAsync(buffer);
+
+string serverReplyMsg = Encoding.UTF8.GetString(buffer, 0, bytesRead);
+
+Console.WriteLine($"Received message from Server: {serverReplyMsg}");
 
 Console.ReadLine();

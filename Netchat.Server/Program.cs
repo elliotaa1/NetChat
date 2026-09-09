@@ -28,4 +28,12 @@ string message = Encoding.UTF8.GetString(buffer, 0, bytesRead);
 
 Console.WriteLine($"Received message from client: {message}");
 
+string reply = "Hello Client! Message received.";
+
+byte[] replyData = Encoding.UTF8.GetBytes(reply);
+
+await stream.WriteAsync(replyData);
+
+Console.WriteLine("Reply sent to client...");
+
 Console.ReadLine();
