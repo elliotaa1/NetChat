@@ -3,6 +3,7 @@
  */
 using System.Net;
 using System.Net.Sockets;
+using System.Text;
 
 
 TcpListener listener = new TcpListener(IPAddress.Any, 5000);
@@ -16,5 +17,15 @@ Console.WriteLine("Waiting for clients to connect...");
 TcpClient client = await listener.AcceptTcpClientAsync();
 
 Console.WriteLine("Client connected!");
+
+NetworkStream stream = client.GetStream();
+
+byte[] buffer = new byte[1024];
+
+int bytesRead = await stream.ReadAsync(buffer);
+
+string message = Encoding.UTF8.GetString(buffer, 0, bytesRead);
+
+Console.WriteLine($"Received message from client: {message}");
 
 Console.ReadLine();

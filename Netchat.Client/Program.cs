@@ -5,20 +5,20 @@
  * Function: Connect to server on localhost and port.
  */
 using System.Net.Sockets;
-using System.Security.Cryptography.X509Certificates;
+using System.Text;
 
 bool isConnected = false;
 
 TcpClient client = new TcpClient();
 
-
-while(!isConnected)
+while (!isConnected)
 {
     try
     {
         Console.WriteLine("Connecting to Server...");
         await client.ConnectAsync("127.0.0.1", 5000);
         isConnected = true;
+        Console.WriteLine("Successfully connected to server on port 5000!");
     }
     catch (SocketException ex)
     {
@@ -29,6 +29,14 @@ while(!isConnected)
         }
     }
 
-Console.WriteLine("Successfully connected to server on port 5000!");
+NetworkStream stream = client.GetStream();
+
+string message = "Hello from client!";
+
+byte[] data = Encoding.UTF8.GetBytes(message);
+
+await stream.WriteAsync(data);
+
+Console.WriteLine($"Sent message to server: {message}");
 
 Console.ReadLine();
