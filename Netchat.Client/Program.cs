@@ -8,8 +8,33 @@ using System.Net.Sockets;
 using System.Text;
 
 
-
 string? restartInput;
+string? userName;
+
+
+static async Task ReceiveMessageAsync(NetworkStream stream, string? userName)
+{
+    byte[] buffer = new byte[1024];
+
+    while (true)
+    {
+        int bytesRead = await stream.ReadAsync(buffer);
+        string message = Encoding.UTF8.GetString(buffer, 0, bytesRead);
+
+        if (bytesRead == 0)
+        {
+            Console.WriteLine("Disconnected from server.");
+            break;
+        }
+        Console.WriteLine();
+        Console.WriteLine(message);
+        Console.WriteLine($"{userName}: ");
+
+    }
+}
+
+
+
 
 do //Outermost loop to check for user input and restart session if desired. If user enters "Y", it will restart the session, if user enters "N", it will exit the application.
 {
@@ -36,10 +61,11 @@ do //Outermost loop to check for user input and restart session if desired. If u
             }
     }
 
-            NetworkStream stream = client.GetStream(); //Creates a stream object to send and receive data between client and server. Stream = Pipe between client and server for sending and receiving data.
-
+            NetworkStream stream = client.GetStream(); //Creates a stream object to send and receive data between client and server. Stream = Pipe between client and server for sending and receiving data. 
+            
             Console.WriteLine("Welcome to NetChat Client!\nPlease enter your username: ");
-            string? userName = Console.ReadLine();
+            userName = Console.ReadLine();
+            _ = ReceiveMessageAsync(stream,userName);
 
             if (!string.IsNullOrWhiteSpace(userName))
             {
@@ -84,6 +110,7 @@ if (restartInput?.ToUpper() == "N")
     Console.WriteLine("Exiting NetChat Client...");
     return;
 }
+
 
 Console.ReadLine();
 

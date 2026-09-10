@@ -32,7 +32,7 @@ static async Task BroadcastMessageAsync(string message, TcpClient sender, List<T
 
     foreach(TcpClient client in connectedClients)
     {
-        if(client != sender) 
+        if(client != sender)
         {
             NetworkStream stream = client.GetStream();
             await stream.WriteAsync(data);
