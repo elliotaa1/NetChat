@@ -19,7 +19,12 @@ while (true) // Outermost loop to accept incoming client connections and handle 
     TcpClient client = await listener.AcceptTcpClientAsync();
 
     Console.WriteLine("Client connected!");
+    _ = HandleClientAsync(client); 
+}
 
+
+static async Task HandleClientAsync(TcpClient client)
+{
     NetworkStream stream = client.GetStream(); // Creates a stream object to send and receive data between client and server. Stream = Pipe between client and server for sending and receiving data.
 
 
@@ -27,7 +32,7 @@ while (true) // Outermost loop to accept incoming client connections and handle 
 
     byte[] usernameBuffer = new byte[1024];
 
-    int bytesUsername = await stream.ReadAsync(usernameBuffer); 
+    int bytesUsername = await stream.ReadAsync(usernameBuffer);
 
     string username = Encoding.UTF8.GetString(usernameBuffer, 0, bytesUsername);
 
@@ -37,12 +42,12 @@ while (true) // Outermost loop to accept incoming client connections and handle 
         int bytesRead = await stream.ReadAsync(buffer); //VERY IMPORTANT SERVER CODE LINE
         string message = Encoding.UTF8.GetString(buffer, 0, bytesRead);
 
-         if (bytesRead == 0)
-         {
+        if (bytesRead == 0)
+        {
             Console.WriteLine($"Client {username} disconnected.");
             break; // Ignores whitespace and when bytesread == 0 upon client exit, breaks inner loop and disposes of client and stream objects, then returns to outer loop to await new client connections.
-         }
-  
+        }
+
         Console.WriteLine($"Received message from {username}: {message}");
     }
 
@@ -50,3 +55,5 @@ while (true) // Outermost loop to accept incoming client connections and handle 
     stream.Dispose();
     Console.WriteLine("Awaiting new client connections...");
 }
+
+    
