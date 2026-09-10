@@ -5,6 +5,8 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 
+List<TcpClient> connectedClients = new List<TcpClient>();
+
 TcpListener listener = new TcpListener(IPAddress.Any, 5000);
 
 listener.Start();
@@ -17,13 +19,29 @@ Console.WriteLine("Waiting for clients to connect...");
 while (true) // Outermost loop to accept incoming client connections and handle their messages. It will continue to listen for new clients indefinitely.
 {
     TcpClient client = await listener.AcceptTcpClientAsync();
-
+    connectedClients.Add(client);
     Console.WriteLine("Client connected!");
-    _ = HandleClientAsync(client); 
+
+    _ = HandleClientAsync(client, connectedClients); 
 }
 
 
-static async Task HandleClientAsync(TcpClient client)
+static async Task BroadcastMessageAsync(string message, TcpClient sender, List<TcpClient> connectedClients)
+{
+    byte[] data = Encoding.UTF8.GetBytes(message);
+
+    foreach(TcpClient client in connectedClients)
+    {
+        if(client != sender)
+        {
+            NetworkStream stream = client.GetStream();
+            await stream.WriteAsync(data);
+        }
+    }
+}
+
+
+static async Task HandleClientAsync(TcpClient client, List<TcpClient> connectedClients)
 {
     NetworkStream stream = client.GetStream(); // Creates a stream object to send and receive data between client and server. Stream = Pipe between client and server for sending and receiving data.
 
@@ -49,8 +67,11 @@ static async Task HandleClientAsync(TcpClient client)
         }
 
         Console.WriteLine($"Received message from {username}: {message}");
+
+        await BroadcastMessageAsync($"{username}: {message}", client, connectedClients);
     }
 
+    connectedClients.Remove(client);
     client.Dispose();
     stream.Dispose();
     Console.WriteLine("Awaiting new client connections...");
