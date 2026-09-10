@@ -28,7 +28,6 @@ static async Task ReceiveMessageAsync(NetworkStream stream, string? userName)
         Console.WriteLine();
         Console.WriteLine(message);
         Console.WriteLine($"{userName}: ");
-
     }
 }
 
@@ -72,10 +71,9 @@ do //Outermost loop to check for user input and restart session if desired. If u
                 byte[] username = Encoding.UTF8.GetBytes(usernamePacket);
                 await stream.WriteAsync(username);
             }
-
+                //Console.Write($"{userName}: ");
                 while (!isMsg) //Inner loop to check for user input and send messages to the server. If user enters "exit", it will break the loop and dispose of client and stream objects, then prompt user to restart session or exit.
                 {
-                    Console.Write($"{userName}: ");
                     string? userInput = Console.ReadLine();
                     isMsg = true;
                     if (string.IsNullOrWhiteSpace(userInput))
@@ -86,12 +84,12 @@ do //Outermost loop to check for user input and restart session if desired. If u
                     if (userInput.ToLower() == "exit")
                     {
                         Console.WriteLine("Exiting user session...");
-                        break; //Breaks inner loop and disposes of client and stream objects, then prompts user to restart session or exit.
+                        break; 
                     }
 
                     string messagePacket = $"MESSAGE|{userInput}";
-                    byte[] data = Encoding.UTF8.GetBytes(messagePacket); //Converts user input to byte array for sending to server.
-                    await stream.WriteAsync(data); //Sends user input to server as byte array. Stream = Pipe between client and server for sending and receiving data.
+                    byte[] data = Encoding.UTF8.GetBytes(messagePacket); 
+                    await stream.WriteAsync(data); 
                     isMsg = false;
                 }
 

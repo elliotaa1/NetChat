@@ -68,12 +68,13 @@ static async Task HandleClientAsync(TcpClient client, List<TcpClient> connectedC
 
         string messagePacket = Encoding.UTF8.GetString(buffer, 0, bytesRead);
 
+
         if (messagePacket.StartsWith("MESSAGE|"))
         {
             string message = messagePacket.Substring("MESSAGE|".Length);
 
             Console.WriteLine($"Received message from {username}: {message}");
-            await BroadcastMessageAsync($"{username}: {messagePacket}", client, connectedClients);
+            await BroadcastMessageAsync($"{username}: {message}", client, connectedClients);
         }
 
     }
