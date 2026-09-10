@@ -11,7 +11,6 @@ using System.Text;
 string? restartInput;
 string? userName;
 
-
 static async Task ReceiveMessageAsync(NetworkStream stream, string? userName)
 {
     byte[] buffer = new byte[1024];
@@ -32,8 +31,6 @@ static async Task ReceiveMessageAsync(NetworkStream stream, string? userName)
 
     }
 }
-
-
 
 
 do //Outermost loop to check for user input and restart session if desired. If user enters "Y", it will restart the session, if user enters "N", it will exit the application.
@@ -71,7 +68,8 @@ do //Outermost loop to check for user input and restart session if desired. If u
             {
                 Console.WriteLine($"Hello {userName}! You can now send messages to the server.");
 
-                byte[] username = Encoding.UTF8.GetBytes(userName);
+                string usernamePacket = $"USERNAME|{userName}";
+                byte[] username = Encoding.UTF8.GetBytes(usernamePacket);
                 await stream.WriteAsync(username);
             }
 
@@ -91,7 +89,8 @@ do //Outermost loop to check for user input and restart session if desired. If u
                         break; //Breaks inner loop and disposes of client and stream objects, then prompts user to restart session or exit.
                     }
 
-                    byte[] data = Encoding.UTF8.GetBytes(userInput); //Converts user input to byte array for sending to server.
+                    string messagePacket = $"MESSAGE|{userInput}";
+                    byte[] data = Encoding.UTF8.GetBytes(messagePacket); //Converts user input to byte array for sending to server.
                     await stream.WriteAsync(data); //Sends user input to server as byte array. Stream = Pipe between client and server for sending and receiving data.
                     isMsg = false;
                 }
